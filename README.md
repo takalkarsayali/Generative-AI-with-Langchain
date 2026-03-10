@@ -1,8 +1,9 @@
-# Generative-AI-with-Langchain
 # 🤖 Gen AI Developer — Interview Preparation Notes
 
 > A personal study guide built through mock interview practice.
 > Updated progressively as new questions are covered.
+
+---
 
 ## ✅ Q1 — What is RAG (Retrieval-Augmented Generation)?
 
@@ -96,6 +97,95 @@ A simple example is email autocomplete — when I type *"Let's connect"* the sys
 
 ---
 
+## ✅ Q7 — What is Temperature in Text Generation?
+
+**Interview-Ready Answer:**
+
+Temperature is a hyperparameter ranging from 0 to 2 that controls the randomness and creativity of LLM output by scaling the probability distribution of the next token.
+
+| Range | Type | Best For |
+|-------|------|----------|
+| **< 0.5 (Low)** | Focused, deterministic, factual | Q&A, code generation, data extraction |
+| **0.5–1.0 (Moderate)** | Balanced creativity & accuracy | Chatbots, summarization |
+| **> 1.0 (High)** | Creative, random, less coherent | Creative writing, brainstorming |
+
+For example, asking "What is the capital of India?" at temperature 0 will always return "New Delhi", but at temperature 1.5 it might give unexpected responses. In production RAG systems like PolicySphere, I keep temperature low to ensure accurate, grounded answers.
+
+> 💡 **Key insight:** *"Temperature 0 = focused & safe. Temperature 2 = creative & risky."*
+
+---
+
+## ✅ Q8 — What is Top-K and Top-P (Nucleus) Sampling?
+
+**Interview-Ready Answer:**
+
+Top-K and Top-P are sampling techniques that control which tokens the LLM can choose from when generating the next word.
+
+**Top-K** picks from the K most probable tokens only. If K=5 and vocabulary has 50,000 words, the model only considers the top 5 highest probability tokens. It's a rigid, fixed-size approach.
+
+**Top-P (Nucleus Sampling)** picks from tokens whose cumulative probability adds up to P. For example with P=0.9: laptop(40%) + mouse(30%) + keyboard(20%) = 90% ✅ — search stops here, remaining tokens are eliminated.
+
+| | Top-K | Top-P |
+|---|---|---|
+| Method | Fixed number of tokens | Tokens until probability fills up |
+| Flexible? | No | Yes |
+| Best when | Vocabulary is consistent | Probabilities vary a lot |
+
+> 💡 **Key insight:** *"Top-K = fixed candidates. Top-P = flexible candidates based on confidence."*
+
+---
+
+## ✅ Q9 — What is Fine-Tuning & When to Use It Over RAG?
+
+**Interview-Ready Answer:**
+
+Fine-tuning is the process of further training a pre-trained model on domain-specific data so it specializes in a particular area. Like an MBBS doctor doing a specialization in gynaecology — the base knowledge stays, but now they're an expert in one domain. It requires labelled data and is cheaper than training from scratch.
+
+| Situation | Use |
+|-----------|-----|
+| Need to change model's tone, style or behavior | Fine-tuning |
+| Domain knowledge is static & won't change often | Fine-tuning |
+| Data is private, sensitive or changes frequently | RAG |
+| Need to cite sources | RAG |
+| Limited compute & budget | RAG |
+
+> 💡 **Key insight:** *"Fine-tuning changes how the model behaves. RAG changes what the model knows."*
+
+---
+
+## 🦜 LangChain — Key Concepts
+
+| Component | Purpose |
+|-----------|---------|
+| **Document Loader** | Loads data from PDFs, CSVs, websites etc. into the pipeline |
+| **Text Splitter** | Chunks documents into smaller pieces for embedding |
+| **Vector Store** | Stores embeddings (e.g. FAISS, Chroma, Pinecone) |
+| **Retriever** | Searches vector store for relevant chunks based on query |
+| **Chain** | A sequence of calls to LLMs and components to complete a task |
+| **Agent** | An LLM that can decide which tools to use dynamically |
+
+**Correct RAG Pipeline Order in LangChain:**
+```
+📄 Document Loader → ✂️ Text Splitter → 🗄️ Vector Store → 🔍 Retriever → 🤖 LLM → 💬 Response
+```
+
+> 💡 LangChain is the glue that connects all GenAI components — ready-made building blocks so you don't build from scratch.
+
+---
+
+## 🧠 MCQ Concepts to Remember
+
+- **BERT** = Encoder-only = Classification, sentiment, embeddings (NOT generation)
+- **GPT, Claude, LLaMA** = Decoder-only = Text generation, chatbots
+- **T5, BART** = Encoder-Decoder = Translation, summarization
+- **K=1 or Temperature=0** = Deterministic — same input always gives same output
+- **Chunking** = Breaking documents into smaller pieces for embedding & retrieval
+- **RAG** = Best for frequently updated or private data
+- **Fine-tuning** = Best for changing model tone/style/behavior
+- **Top-P** = Preferred over Top-K in most modern LLMs
+
+---
+
 ## 📚 Key Terms Glossary
 
 | Term | Definition |
@@ -122,4 +212,4 @@ A simple example is email autocomplete — when I type *"Let's connect"* the sys
 
 ---
 
-*📅 Last Updated: In progress — updated after each mock interview session*
+*📅 Last Updated: Session 2 — Q7, Q8, Q9 + LangChain concepts added*

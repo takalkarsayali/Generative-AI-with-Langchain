@@ -5,6 +5,135 @@
 
 ---
 
+## Transformers
+<details>
+  
+**What are transformers?**
+
+🔹 One-Line Definition
+
+A Transformer is a deep learning architecture that processes sequential data using a mechanism called self-attention, allowing it to capture relationships between all parts of an input simultaneously — without relying on recurrence or convolution.
+
+🔹 Why Were Transformers Introduced?
+Before Transformers, RNNs and LSTMs were used for sequence tasks. Their problems:
+
+Processed tokens sequentially → slow to train
+Struggled with long-range dependencies (forgetting earlier context)
+Hard to parallelize on GPUs
+
+Transformers solved all three. 
+> 💡 **Key insight:** Introduced in the landmark 2017 paper: "Attention Is All You Need" (Vaswani et al., Google Brain).
+
+# Transformer Core Architecture
+
+## Components Explained
+
+| Component | What it Does |
+|-----------|-------------|
+| **Tokenization** | Breaks input text into subword tokens |
+| **Embeddings** | Converts tokens into dense vector representations |
+| **Positional Encoding** | Injects sequence order information (since Transformers have no recurrence) |
+| **Self-Attention** | Allows each token to attend to every other token in the sequence |
+| **Multi-Head Attention** | Runs multiple attention mechanisms in parallel to capture different relationships |
+| **Feed Forward Layer** | Applies non-linear transformations independently to each token |
+| **Layer Norm + Residual Connections** | Stabilizes training and improves gradient flow |
+| **Encoder** | Extracts contextual representations from the input sequence |
+| **Decoder** | Generates output tokens using previous outputs and encoder context |
+| **Masked Attention** | Prevents the decoder from seeing future tokens during generation |
+| **Cross-Attention** | Allows the decoder to attend to encoder outputs |
+| **Softmax Layer** | Converts logits into probability distributions over the vocabulary |
+| **Chain-of-Thought (CoT)** | Encourages step-by-step reasoning for complex tasks |
+| **Prompt Engineering** | Designs prompts that guide model behavior and output quality |
+| **Context Window** | Defines how much text the model can process at once |
+| **RAG (Retrieval-Augmented Generation)** | Retrieves external knowledge and injects it into prompts for grounded responses |
+| **Fine-Tuning** | Adapts a pretrained model to specific tasks or domains |
+| **Inference** | The process of generating predictions or text from a trained model |
+| **KV Cache** | Stores attention key-value pairs to speed up autoregressive generation |
+| **Temperature** | Controls randomness and creativity in generated outputs |
+| **Top-k / Top-p Sampling** | Sampling strategies for selecting the next token during generation |
+
+---
+
+## Transformer Workflow
+
+```text
+Input Text
+    │
+    ▼
+Tokenization
+    │
+    ▼
+Embeddings + Positional Encoding
+    │
+    ▼
+┌─────────────────────────────┐
+│      Encoder Stack          │
+│ ─ Self-Attention            │
+│ ─ Multi-Head Attention      │
+│ ─ Feed Forward Layer        │
+│ ─ LayerNorm + Residual      │
+└─────────────────────────────┘
+    │
+    ▼
+Context Vectors
+    │
+    ▼
+┌─────────────────────────────┐
+│      Decoder Stack          │
+│ ─ Masked Self-Attention     │
+│ ─ Cross-Attention           │
+│ ─ Feed Forward Layer        │
+│ ─ LayerNorm + Residual      │
+└─────────────────────────────┘
+    │
+    ▼
+Linear Layer + Softmax
+    │
+    ▼
+Output Probabilities
+    │
+    ▼
+Generated Text
+```
+
+---
+
+## Core Attention Formula
+
+```math
+Attention(Q, K, V) = Softmax((QKᵀ / √dₖ))V
+```
+
+Where:
+
+- **Q (Query):** What the token is looking for
+- **K (Key):** What each token offers
+- **V (Value):** Information passed forward
+- **dₖ:** Dimension of the key vectors
+
+---
+
+## Key Takeaways
+
+- Transformers process all tokens in parallel.
+- Self-attention captures relationships between tokens.
+- Multi-head attention learns multiple contextual patterns simultaneously.
+- Positional encoding preserves word order information.
+- Decoder uses masked attention to generate text autoregressively.
+- Modern LLMs such as GPT, Claude, Llama, and Gemini are built on Transformer architectures.
+
+**_Interview answers_**
+> Transformers replaced sequential models by using self-attention to process all tokens in parallel and capture long-range dependencies. The key innovation is computing Query, Key, Value matrices to assign attention weights across the entire sequence. This architecture, scaled with data and compute, became the backbone of every modern LLM — including the models I work with via LangChain, OpenAI, and Groq in my RAG pipelines.
+
+> In my work, I've primarily operated at the application and integration layer of Transformer-based models rather than training them from scratch — which aligns with most GenAI Engineer roles today.
+Specifically, I've worked with LLaMA 3 via Groq in my KMS project at HPPL — a production RAG system for shopfloor machine incident resolution. I used LLaMA as the generative backbone, where the Decoder's autoregressive attention generates resolution responses grounded by retrieved context.
+In PolicySphere-AI, I integrated OpenAI's GPT models via LangChain — again Decoder-only Transformers — building a full RAG pipeline with FAISS as the vector store and prompt templates to control the model's attention over retrieved chunks.
+For Equity-X, I used LLM APIs for financial Q&A, where understanding how the model attends to structured financial context was key to prompt design.
+On the embedding side, I've worked with sentence-transformer models for generating dense vector representations — these are Encoder-based Transformers — feeding into ChromaDB and FAISS for semantic search.
+I understand the architectural distinction between Encoder-only models like BERT for embeddings, and Decoder-only models like GPT and LLaMA for generation — and I make that choice deliberately in my pipeline design. 
+
+</details>
+
 ## ✅ Q1 — What is RAG (Retrieval-Augmented Generation)?
 
 **Interview-Ready Answer:**
